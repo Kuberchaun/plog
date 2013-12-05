@@ -5,23 +5,24 @@ Simple logging framework for PostgreSQL.  The logging is commited in an autonomo
 
 
 Requires:
-CREATE EXTENSION dblink;
+<tt>CREATE EXTENSION dblink;
 
 
 Example1(Make sure everything is working):
-<code>
-BEGIN TRANSACTION;
 
-CREATE TABLE xyz();
+<tt>BEGIN TRANSACTION;
 
-select plog.debug('I was logged!');
+<tt>CREATE TABLE xyz();
 
-ROLLBACK TRANSACTION;
+<tt>select plog.debug('I was logged!');
 
-</code>
+<tt>ROLLBACK TRANSACTION;
 
-select * from xyz; --Will return error that table doesn't exist because we rollbacked the transaction.
 
-select * from plog.the_log;--WIll return 1 row because the logging call was commited on its own transaction.
+--Will return error that table doesn't exist because we rollbacked the transaction.
+<tt>select * from xyz; 
+
+--WIll return 1 row because the logging call was commited on its own transaction.
+<tt>select * from plog.the_log;
 
 
