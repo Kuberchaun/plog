@@ -25,4 +25,7 @@ Example1(Make sure everything is working):
 --WIll return 1 row because the logging call was commited on its own transaction.
 <tt>select * from plog.the_log;
 
+I'm still working on cleaning up the scripts so this is a work in progress, but still of value for those needing
+something like Oracle PLSQL AutonomousTransactions in PostgreSQL.
+
 
