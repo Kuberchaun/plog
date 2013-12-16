@@ -6,9 +6,9 @@
 --
 -- Input Parameters: log_text TEXT - The text you want to log to the logging table.
 --
--- Output Parameters:  VOID
+-- Output Parameters:  NA
 --
--- Error Conditions Raised:
+-- Error Conditions Raised: NA
 --
 -- Author:      Bob Henkel bob.henkel@gmail.com
 --
