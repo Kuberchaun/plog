@@ -1,6 +1,22 @@
--- Function: plog.debug(text)
-
--- DROP FUNCTION plog.debug(text);
+-- *********************************************************************************************
+-- Description: -- Opens up a new transactions by creating a new connection
+-- with dblink and commits to the log table the desired text to logging table regardless of parent 
+-- transaction being rolled back.  Primarly for instrumenting code and in 
+-- special cases doing batch commits for a large volume of data.
+--
+-- Input Parameters: log_text TEXT - The text you want to log to the logging table.
+--
+-- Output Parameters:  VOID
+--
+-- Error Conditions Raised:
+--
+-- Author:      Bob Henkel bob.henkel@gmail.com
+--
+-- Revision History
+-- Date            Author       Reason for Change
+-- ----------------------------------------------------------------
+-- 13-DEC-2013     Bob Henkel   Initial Version
+-- *********************************************************************************************
 
 CREATE OR REPLACE FUNCTION plog.debug(log_text text)
   RETURNS void AS
@@ -13,18 +29,14 @@ BEGIN
     SELECT dblink_get_connections[1] into conn
     FROM dblink_get_connections()
     WHERE dblink_get_connections[1] = 'dblink_logging';
-    --RAISE NOTICE 'value of conn %', conn;
+    
     IF ( conn = 'dblink_logging' ) THEN
         SELECT * FROM public.dblink('dblink_logging','SELECT * FROM plog.insert_debug('''|| log_text || ''',''' || pid ||''')')  as result(void_output TEXT) INTO void;
-        --SELECT dblink_disconnect('dblink_logging') INTO void;
-        --RAISE NOTICE 'connection found';
     END IF;
 
     IF ( conn ISNULL ) THEN
         SELECT dblink_connect('dblink_logging','dbname=sandbox') INTO void;
         SELECT * FROM public.dblink('dblink_logging','SELECT * FROM plog.insert_debug('''|| log_text || ''',''' || pid ||''')')  as result(void_output TEXT) INTO void;
-        --SELECT dblink_disconnect('dblink_logging') INTO void; 
-        --RAISE NOTICE 'connection isnull';
     END IF; 
     RETURN;
 END;
